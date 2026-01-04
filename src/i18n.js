@@ -1,4 +1,6 @@
-export const translations = {
+import { createI18n } from 'vue-i18n'
+
+const messages = {
   en: {
     nav_product: 'Product',
     nav_security: 'Solutions',
@@ -63,7 +65,6 @@ export const translations = {
     timeline_pre_title: 'Online travel (OTA)',
     timeline_pre_body: 'Issue one-time virtual cards for flights and hotels to secure transactions and simplify reconciliation.',
     timeline_in_title: 'API sample',
-    timeline_in_body: 'POST /api/v1/cards/issue { "currency": "USD", "type": "VIRTUAL" }',
     timeline_post_title: 'More scenarios',
     timeline_post_body: 'Media buy, commerce, travel and more payment needs.',
     workflow_pill: 'Developer center',
@@ -88,6 +89,7 @@ export const translations = {
     feature3_body: 'Configure custom account balance alerts to prevent insufficient funds and improve payment success rates.',
     feature4_title: 'Multi-role management',
     feature4_body: 'Support multiple account management with customizable permissions for finance, operations, and other roles to enable efficient collaboration.',
+    scenarios_heading: 'Common scenarios',
     scenario1: 'Platform rent',
     scenario2: 'Corporate procurement',
     scenario3: 'Logistics & warehousing',
@@ -196,7 +198,6 @@ export const translations = {
     timeline_pre_title: '在线航旅预订 (OTA)',
     timeline_pre_body: '为机票、酒店预订生成一次性虚拟卡，确保交易安全并简化对账。',
     timeline_in_title: 'API 示例',
-    timeline_in_body: 'POST /api/v1/cards/issue { "currency": "USD", "type": "VIRTUAL" }',
     timeline_post_title: '更多场景',
     timeline_post_body: '广告、跨境、航旅等多种支付需求。',
     workflow_pill: '开发者中心',
@@ -221,6 +222,7 @@ export const translations = {
     feature3_body: '可自主配置账户余额预警，预防资金不足，提升支付成功率。',
     feature4_title: '多角色管理',
     feature4_body: '支持多账户管理，为财务、运营等角色定制个性化权限，助力企业高效协作。',
+    scenarios_heading: '常见场景',
     scenario1: '平台店租',
     scenario2: '企业采购',
     scenario3: '仓储物流',
@@ -266,3 +268,12 @@ export const translations = {
     footer_copyright: '© 2026 ElayPay. 保留所有权利。',
   },
 }
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'zh',
+  fallbackLocale: 'en',
+  messages,
+})
+
+export default i18n

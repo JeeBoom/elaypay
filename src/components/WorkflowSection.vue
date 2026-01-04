@@ -1,15 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { translations } from '../i18n';
+import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    required: true
-  }
-});
-
-const dict = computed(() => translations[props.currentLang] || translations.en);
+const { t } = useI18n();
 
 const workflowCards = [
   { titleKey: "flow1_title", bodyKey: "flow1_body" },
@@ -24,11 +16,11 @@ const workflowCards = [
     <div class="section-head">
       <div>
         <div class="pill" data-i18n="workflow_pill">
-          {{ dict.workflow_pill }}
+          {{ t('workflow_pill') }}
         </div>
-        <h2 data-i18n="workflow_heading">{{ dict.workflow_heading }}</h2>
+        <h2 data-i18n="workflow_heading">{{ t('workflow_heading') }}</h2>
         <p class="lead" data-i18n="workflow_lead">
-          {{ dict.workflow_lead }}
+          {{ t('workflow_lead') }}
         </p>
       </div>
     </div>
@@ -38,9 +30,10 @@ const workflowCards = [
         :key="card.titleKey"
         class="card tilt reveal"
       >
-        <h3 :data-i18n="card.titleKey">{{ dict[card.titleKey] }}</h3>
-        <p :data-i18n="card.bodyKey">{{ dict[card.bodyKey] }}</p>
+        <h3 :data-i18n="card.titleKey">{{ t(card.titleKey) }}</h3>
+        <p :data-i18n="card.bodyKey">{{ t(card.bodyKey) }}</p>
       </div>
     </div>
   </section>
 </template>
+

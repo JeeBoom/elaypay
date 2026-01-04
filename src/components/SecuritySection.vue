@@ -1,15 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { translations } from '../i18n';
+import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    required: true
-  }
-});
-
-const dict = computed(() => translations[props.currentLang] || translations.en);
+const { t } = useI18n();
 
 const securityPanels = [
   {
@@ -22,7 +14,7 @@ const securityPanels = [
     bodyKey: "panel2_body",
     timeline: [
       { titleKey: "timeline_pre_title", bodyKey: "timeline_pre_body" },
-      { titleKey: "timeline_in_title", bodyKey: "timeline_in_body" },
+      { titleKey: "timeline_in_title", body: "POST /api/v1/cards/issue { 'currency': 'USD', 'type': 'VIRTUAL' }" },
       { titleKey: "timeline_post_title", bodyKey: "timeline_post_body" },
     ],
   },
@@ -34,11 +26,11 @@ const securityPanels = [
     <div class="section-head">
       <div>
         <div class="pill" data-i18n="security_pill">
-          {{ dict.security_pill }}
+          {{ t('security_pill') }}
         </div>
-        <h2 data-i18n="security_heading">{{ dict.security_heading }}</h2>
+        <h2 data-i18n="security_heading">{{ t('security_heading') }}</h2>
         <p class="lead" data-i18n="security_lead">
-          {{ dict.security_lead }}
+          {{ t('security_lead') }}
         </p>
       </div>
     </div>
@@ -48,15 +40,15 @@ const securityPanels = [
         :key="panel.titleKey"
         class="panel reveal"
       >
-        <h4 :data-i18n="panel.titleKey">{{ dict[panel.titleKey] }}</h4>
-        <p :data-i18n="panel.bodyKey">{{ dict[panel.bodyKey] }}</p>
+        <h4 :data-i18n="panel.titleKey">{{ t(panel.titleKey) }}</h4>
+        <p :data-i18n="panel.bodyKey">{{ t(panel.bodyKey) }}</p>
         <div v-if="panel.badges" class="badge-row" style="margin-top: 12px">
           <span
             v-for="badge in panel.badges"
             :key="badge"
             class="badge"
             :data-i18n="badge"
-            >{{ dict[badge] }}</span
+            >{{ t(badge) }}</span
           >
         </div>
         <div
@@ -70,10 +62,10 @@ const securityPanels = [
             class="timeline-item"
           >
             <strong :data-i18n="item.titleKey">{{
-              dict[item.titleKey]
+              t(item.titleKey)
             }}</strong
             ><br />
-            <span :data-i18n="item.bodyKey">{{ dict[item.bodyKey] }}</span>
+            <span :data-i18n="item.bodyKey">{{ item.body || t(item.bodyKey) }}</span>
           </div>
         </div>
       </div>

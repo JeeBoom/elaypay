@@ -2,9 +2,9 @@
   <section id="compliance" class="section-padding">
     <div class="container">
       <div class="section-header">
-        <!-- <span class="pill">{{ dict.compliance_pill }}</span> -->
-        <h2 data-i18n="compliance_heading">{{ dict.compliance_heading }}</h2>
-        <!-- <p class="section-lead">{{ dict.compliance_lead }}</p> -->
+        <!-- <span class="pill">{{ t('compliance_pill') }}</span> -->
+        <h2 data-i18n="compliance_heading">{{ t('compliance_heading') }}</h2>
+        <!-- <p class="section-lead">{{ t('compliance_lead') }}</p> -->
       </div>
 
       <div class="compliance-grid">
@@ -23,33 +23,26 @@
 
 <script setup>
 import { computed } from "vue";
-import { translations } from "../i18n";
+import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    default: "en",
-  },
-});
-
-const dict = computed(() => translations[props.currentLang]);
+const { t } = useI18n();
 
 const complianceItems = computed(() => [
   {
-    title: dict.value.compliance_item1_title,
-    body: dict.value.compliance_item1_body,
+    title: t('compliance_item1_title'),
+    body: t('compliance_item1_body'),
   },
   {
-    title: dict.value.compliance_item2_title,
-    body: dict.value.compliance_item2_body,
+    title: t('compliance_item2_title'),
+    body: t('compliance_item2_body'),
   },
   {
-    title: dict.value.compliance_item3_title,
-    body: dict.value.compliance_item3_body,
+    title: t('compliance_item3_title'),
+    body: t('compliance_item3_body'),
   },
   {
-    title: dict.value.compliance_item4_title,
-    body: dict.value.compliance_item4_body,
+    title: t('compliance_item4_title'),
+    body: t('compliance_item4_body'),
   },
 ]);
 </script>

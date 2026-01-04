@@ -3,8 +3,8 @@
     <div class="container">
       <div class="expense-layout">
         <div class="expense-content">
-          <span class="pill" data-i18n="expense_pill">{{ dict.expense_pill }}</span>
-          <h2 data-i18n="expense_heading">{{ dict.expense_heading }}</h2>
+          <span class="pill" data-i18n="expense_pill">{{ t('expense_pill') }}</span>
+          <h2 data-i18n="expense_heading">{{ t('expense_heading') }}</h2>
 
           <div class="expense-features">
             <div
@@ -61,33 +61,26 @@
 
 <script setup>
 import { computed } from "vue";
-import { translations } from "../i18n";
+import { useI18n } from "vue-i18n";
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    default: "en",
-  },
-});
-
-const dict = computed(() => translations[props.currentLang]);
+const { t } = useI18n();
 
 const expenseFeatures = computed(() => [
   {
-    title: dict.value.expense_feature1_title,
-    body: dict.value.expense_feature1_body,
+    title: t('expense_feature1_title'),
+    body: t('expense_feature1_body'),
     icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 3H15L17 5H21C21.5523 5 22 5.44772 22 6V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V6C2 5.44772 2.44772 5 3 5H7L9 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     iconBg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   },
   {
-    title: dict.value.expense_feature2_title,
-    body: dict.value.expense_feature2_body,
+    title: t('expense_feature2_title'),
+    body: t('expense_feature2_body'),
     icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     iconBg: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
   },
   {
-    title: dict.value.expense_feature3_title,
-    body: dict.value.expense_feature3_body,
+    title: t('expense_feature3_title'),
+    body: t('expense_feature3_body'),
     icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 15V17M6 21H18C19.1046 21 20 20.1046 20 19V13C20 11.8954 19.1046 11 18 11H6C4.89543 11 4 11.8954 4 13V19C4 20.1046 4.89543 21 6 21ZM16 11V7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7V11H16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
     iconBg: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
   },
@@ -100,8 +93,9 @@ const transactions = computed(() => [
   { merchantKey: "expense_tx1_merchant", date: "2023.11.01", amount: "$ 43.00", icon: "🛍️" },
 ].map(tx => ({
   ...tx,
-  merchant: dict.value[tx.merchantKey]
+  merchant: t(tx.merchantKey)
 })));
+
 </script>
 
 <style scoped>

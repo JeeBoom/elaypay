@@ -1,15 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { translations } from '../i18n';
+import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    required: true
-  }
-});
-
-const dict = computed(() => translations[props.currentLang] || translations.en);
+const { t } = useI18n();
 
 const ctaStatuses = [
   {
@@ -43,18 +35,18 @@ const ctaStatuses = [
 <template>
   <section id="cta" class="cta reveal">
     <div>
-      <div class="pill" data-i18n="cta_pill">{{ dict.cta_pill }}</div>
-      <h3 data-i18n="cta_title">{{ dict.cta_title }}</h3>
-      <p data-i18n="cta_body">{{ dict.cta_body }}</p>
+      <div class="pill" data-i18n="cta_pill">{{ t('cta_pill') }}</div>
+      <h3 data-i18n="cta_title">{{ t('cta_title') }}</h3>
+      <p data-i18n="cta_body">{{ t('cta_body') }}</p>
       <div class="cta-buttons" style="margin-top: 14px">
         <a
           class="btn"
           href="mailto:hello@elaypay.app"
           data-i18n="cta_btn_primary"
-          >{{ dict.cta_btn_primary }}</a
+          >{{ t('cta_btn_primary') }}</a
         >
         <a class="btn ghost" href="#" data-i18n="cta_btn_secondary">{{
-          dict.cta_btn_secondary
+          t('cta_btn_secondary')
         }}</a>
       </div>
     </div>
@@ -71,15 +63,15 @@ const ctaStatuses = [
               v-if="item.html"
               style="font-weight: 600"
               :data-i18n-html="item.titleKey"
-              v-html="dict[item.titleKey]"
+              v-html="t(item.titleKey)"
             ></div>
             <div v-else style="font-weight: 600" :data-i18n="item.titleKey">
-              {{ dict[item.titleKey] }}
+              {{ t(item.titleKey) }}
             </div>
             <span
               style="color: var(--muted); font-size: 12px"
               :data-i18n="item.subKey"
-              >{{ dict[item.subKey] }}</span
+              >{{ t(item.subKey) }}</span
             >
           </div>
         </div>
@@ -87,3 +79,5 @@ const ctaStatuses = [
     </div>
   </section>
 </template>
+
+

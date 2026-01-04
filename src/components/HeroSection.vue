@@ -1,15 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { translations } from '../i18n';
+import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    required: true
-  }
-});
-
-const dict = computed(() => translations[props.currentLang] || translations.en);
+const { t } = useI18n();
 
 const heroMetrics = [
   { labelKey: "metric_latency", value: "Visa / Mastercard" },
@@ -40,15 +32,15 @@ const heroStatus = [
 <template>
   <section class="hero">
     <div>
-      <div class="pill" data-i18n="hero_pill">{{ dict.hero_pill }}</div>
-      <h1 data-i18n-html="hero_title" v-html="dict.hero_title"></h1>
-      <p data-i18n="hero_body">{{ dict.hero_body }}</p>
+      <div class="pill" data-i18n="hero_pill">{{ t('hero_pill') }}</div>
+      <h1 data-i18n-html="hero_title" v-html="t('hero_title')"></h1>
+      <p data-i18n="hero_body">{{ t('hero_body') }}</p>
       <div class="hero-actions">
         <a class="btn" href="#" data-i18n="hero_start">{{
-          dict.hero_start
+          t('hero_start')
         }}</a>
         <a class="btn ghost" href="#" data-i18n="hero_security">{{
-          dict.hero_security
+          t('hero_security')
         }}</a>
       </div>
       <div class="stacked-metrics">
@@ -58,7 +50,7 @@ const heroStatus = [
           class="metric"
         >
           <span :data-i18n="metric.labelKey">{{
-            dict[metric.labelKey]
+            t(metric.labelKey)
           }}</span>
           <strong>{{ metric.value }}</strong>
         </div>
@@ -66,15 +58,15 @@ const heroStatus = [
     </div>
     <div class="hero-card tilt">
       <div class="floating-tag">LIVE</div>
-      <h3 data-i18n="hero_card_title">{{ dict.hero_card_title }}</h3>
-      <p data-i18n="hero_card_body">{{ dict.hero_card_body }}</p>
+      <h3 data-i18n="hero_card_title">{{ t('hero_card_title') }}</h3>
+      <p data-i18n="hero_card_body">{{ t('hero_card_body') }}</p>
       <div class="badge-row">
         <span
           v-for="badge in heroBadges"
           :key="badge"
           class="badge"
           :data-i18n="badge"
-          >{{ dict[badge] }}</span
+          >{{ t(badge) }}</span
         >
       </div>
       <div class="status-bar" style="margin-top: 16px">
@@ -88,10 +80,10 @@ const heroStatus = [
             <span
               style="color: var(--muted); font-size: 12px"
               :data-i18n="status.labelKey"
-              >{{ dict[status.labelKey] }}</span
+              >{{ t(status.labelKey) }}</span
             >
             <div style="font-weight: 600" :data-i18n="status.valueKey">
-              {{ dict[status.valueKey] }}
+              {{ t(status.valueKey) }}
             </div>
           </div>
         </div>

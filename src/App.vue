@@ -7,7 +7,7 @@ import {
   ref,
   watch,
 } from "vue";
-import { translations } from "./i18n";
+import { useI18n } from "vue-i18n";
 import ThemeToggle from "./components/ThemeToggle.vue";
 import HeroSection from "./components/HeroSection.vue";
 import ProductSection from "./components/ProductSection.vue";
@@ -19,69 +19,60 @@ import ComplianceSection from "./components/ComplianceSection.vue";
 import CtaSection from "./components/CtaSection.vue";
 import { useCanvas } from "./composables/useCanvas";
 
+const { locale, t } = useI18n()
+
 const navLinks = [
   { id: "product", labelKey: "nav_product" },
   { id: "security", labelKey: "nav_security" },
-  { id: "expense", labelKey: "nav_expense" },
   { id: "workflow", labelKey: "nav_workflow" },
   { id: "cta", labelKey: "nav_contact" },
-  { id: "compliance", labelKey: "nav_compliance" },
 ];
 
-const scrollSections = [
-  "product",
-  "security",
-  "expense",
-  "workflow",
-  "cta",
-  "compliance",
-];
+const scrollSections = ["product", "security", "workflow", "cta"];
 
-const currentLang = ref("zh");
 const langTogglePulse = ref(false);
 const activeDot = ref(0);
 
 // Canvas hook
 const { canvasRef, setupCanvas, cleanup: cleanupCanvas } = useCanvas();
 
-const dict = computed(() => translations[currentLang.value] || translations.en);
 const langToggleStyle = computed(() => ({
-  "--slide": currentLang.value === "zh" ? "100%" : "0%",
+  "--slide": locale.value === "zh" ? "100%" : "0%",
 }));
 
-let observer;
+const animateLanguage = (lang) => {
+  // 添加淡出效果
+  const i18nElements = document.querySelectorAll('[data-i18n], [data-i18n-html]');
+  i18nElements.forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(4px)';
+  });
+  
+  // 等待过渡完成后改变语言
+  setTimeout(() => {
+    locale.value = lang;
+    
+    // 改变语言后，移除内联样式以触发过渡显示
+    setTimeout(() => {
+      i18nElements.forEach(el => {
+        el.style.opacity = '';
+        el.style.transform = '';
+      });
+    }, 10);
+  }, 140);
+  
+  // 脉冲动画
+  langTogglePulse.value = true;
+  setTimeout(() => {
+    langTogglePulse.value = false;
+  }, 400);
+};
 
 const updateDocumentLang = (lang) => {
   document.documentElement.lang = lang;
 };
 
-const setLanguage = (lang) => {
-  currentLang.value = lang;
-};
-
-const animateLanguage = (lang) => {
-  if (lang === currentLang.value) return;
-  const nodes = Array.from(
-    document.querySelectorAll("[data-i18n], [data-i18n-html]")
-  );
-  nodes.forEach((el) => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(6px)";
-  });
-  langTogglePulse.value = true;
-  setTimeout(() => {
-    setLanguage(lang);
-    nextTick(() => {
-      nodes.forEach((el) => {
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
-      });
-    });
-    setTimeout(() => {
-      langTogglePulse.value = false;
-    }, 360);
-  }, 180);
-};
+let observer;
 
 const addTilt = (el) => {
   const strength = 8;
@@ -161,12 +152,12 @@ const scrollToSection = (id) => {
   if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-watch(currentLang, (lang) => {
+watch(locale, (lang) => {
   updateDocumentLang(lang);
 });
 
 onMounted(() => {
-  updateDocumentLang(currentLang.value);
+  updateDocumentLang(locale.value);
   setupCanvas();
   setupTilts();
   setupReveal();
@@ -201,7 +192,7 @@ onBeforeUnmount(() => {
           <ul>
             <li v-for="link in navLinks" :key="link.id">
               <a href="#" :data-i18n="link.labelKey">{{
-                dict[link.labelKey]
+                t(link.labelKey)
               }}</a>
             </li>
           </ul>
@@ -214,7 +205,7 @@ onBeforeUnmount(() => {
           >
             <button
               class="lang-btn"
-              :class="{ active: currentLang === 'en' }"
+              :class="{ active: locale === 'en' }"
               @click="animateLanguage('en')"
               data-lang="en"
             >
@@ -222,7 +213,7 @@ onBeforeUnmount(() => {
             </button>
             <button
               class="lang-btn"
-              :class="{ active: currentLang === 'zh' }"
+              :class="{ active: locale === 'zh' }"
               @click="animateLanguage('zh')"
               data-lang="zh"
             >
@@ -230,15 +221,15 @@ onBeforeUnmount(() => {
             </button>
           </div>
           <a class="btn ghost" href="#" data-i18n="nav_login">{{
-            dict.nav_login
+            t('nav_login')
           }}</a>
           <a class="btn" href="#" data-i18n="nav_signup">{{
-            dict.nav_signup
+            t('nav_signup')
           }}</a>
         </div>
       </header>
 
-      <HeroSection :current-lang="currentLang" />
+      <HeroSection />
 
       <div class="scroll-indicator">
         <div
@@ -253,22 +244,22 @@ onBeforeUnmount(() => {
 
       <div class="glow-line"></div>
 
-      <ProductSection :current-lang="currentLang" />
+      <ProductSection />
 
-      <SecuritySection :current-lang="currentLang" />
+      <SecuritySection />
 
-      <ManagementSection :current-lang="currentLang" />
+      <ManagementSection />
 
-      <ExpenseManagementSection :current-lang="currentLang" />
+      <ExpenseManagementSection />
 
-      <WorkflowSection :current-lang="currentLang" />
+      <WorkflowSection />
 
-      <CtaSection :current-lang="currentLang" />
+      <CtaSection />
 
-      <ComplianceSection :current-lang="currentLang" />
+      <ComplianceSection />
 
       <footer>
-        <div data-i18n="footer_text">{{ dict.footer_text }}</div>
+        <div data-i18n="footer_text">{{ t('footer_text') }}</div>
         <div
           style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center"
         >
@@ -276,24 +267,24 @@ onBeforeUnmount(() => {
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_status"
-            >{{ dict.footer_status }}</a
+            >{{ t('footer_status') }}</a
           >
           <a
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_docs"
-            >{{ dict.footer_docs }}</a
+            >{{ t('footer_docs') }}</a
           >
           <a
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_careers"
-            >{{ dict.footer_careers }}</a
+            >{{ t('footer_careers') }}</a
           >
           <span
             style="color: var(--muted); font-size: 12px"
             data-i18n="footer_copyright"
-            >{{ dict.footer_copyright }}</span
+            >{{ t('footer_copyright') }}</span
           >
         </div>
       </footer>

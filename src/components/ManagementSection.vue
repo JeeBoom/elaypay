@@ -1,15 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { translations } from '../i18n';
+import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-  currentLang: {
-    type: String,
-    required: true
-  }
-});
-
-const dict = computed(() => translations[props.currentLang] || translations.en);
+const { t } = useI18n();
 
 const managementFeatures = [
   { titleKey: "feature1_title", bodyKey: "feature1_body" },
@@ -33,11 +25,11 @@ const scenarios = [
     <div class="section-head">
       <div>
         <div class="pill" data-i18n="management_pill">
-          {{ dict.management_pill }}
+          {{ t('management_pill') }}
         </div>
-        <h2 data-i18n="management_heading">{{ dict.management_heading }}</h2>
+        <h2 data-i18n="management_heading">{{ t('management_heading') }}</h2>
         <p class="lead" data-i18n="management_lead">
-          {{ dict.management_lead }}
+          {{ t('management_lead') }}
         </p>
       </div>
     </div>
@@ -47,13 +39,13 @@ const scenarios = [
         :key="feature.titleKey"
         class="card tilt reveal"
       >
-        <h3 :data-i18n="feature.titleKey">{{ dict[feature.titleKey] }}</h3>
-        <p :data-i18n="feature.bodyKey">{{ dict[feature.bodyKey] }}</p>
+        <h3 :data-i18n="feature.titleKey">{{ t(feature.titleKey) }}</h3>
+        <p :data-i18n="feature.bodyKey">{{ t(feature.bodyKey) }}</p>
       </div>
     </div>
     
     <div class="section-head" style="margin-top: 60px">
-      <h2 data-i18n="scenarios_heading">{{ dict.scenarios_heading }}</h2>
+      <h2 data-i18n="scenarios_heading">{{ t('scenarios_heading') }}</h2>
     </div>
     <div class="scenario-grid">
       <div
@@ -63,7 +55,7 @@ const scenarios = [
       >
         <img :src="scenario.icon" alt="" class="scenario-icon" />
         <div class="scenario-label" :data-i18n="scenario.key">
-          {{ dict[scenario.key] }}
+          {{ t(scenario.key) }}
         </div>
       </div>
     </div>
