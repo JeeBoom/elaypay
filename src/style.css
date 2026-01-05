@@ -386,7 +386,7 @@ nav a:hover {
 }
 
 .btn.ghost {
-  background: transparent;
+  background: rgba(124, 77, 255, 0.1);
   border: none;
   color: var(--text-2);
 }
@@ -397,6 +397,7 @@ nav a:hover {
 
 [data-theme="light"] .btn.ghost {
   color: var(--text-2);
+  background: rgba(124, 77, 255, 0.08);
 }
 
 [data-theme="light"] .theme-toggle-floating {
