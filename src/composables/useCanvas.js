@@ -11,7 +11,7 @@ export function useCanvas() {
   let t = 0;
 
   const particleConfig = {
-    count: 80,
+    count: 0,
     maxSpeed: 0.35,
     waveAmp: 32,
     hueBase: 270,

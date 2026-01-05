@@ -35,7 +35,6 @@ const ctaStatuses = [
 <template>
   <section id="cta" class="cta reveal">
     <div>
-      <div class="pill" data-i18n="cta_pill">{{ t('cta_pill') }}</div>
       <h3 data-i18n="cta_title">{{ t('cta_title') }}</h3>
       <p data-i18n="cta_body">{{ t('cta_body') }}</p>
       <div class="cta-buttons" style="margin-top: 14px">

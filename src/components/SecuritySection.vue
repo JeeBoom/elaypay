@@ -24,15 +24,10 @@ const securityPanels = [
 <template>
   <section id="security" class="section">
     <div class="section-head">
-      <div>
-        <div class="pill" data-i18n="security_pill">
-          {{ t('security_pill') }}
-        </div>
-        <h2 data-i18n="security_heading">{{ t('security_heading') }}</h2>
-        <p class="lead" data-i18n="security_lead">
-          {{ t('security_lead') }}
-        </p>
-      </div>
+      <h2 data-i18n="security_heading">{{ t('security_heading') }}</h2>
+      <p class="lead" data-i18n="security_lead">
+        {{ t('security_lead') }}
+      </p>
     </div>
     <div class="panels">
       <div

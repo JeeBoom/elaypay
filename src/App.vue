@@ -9,7 +9,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ThemeToggle from "./components/ThemeToggle.vue";
-import HeroSection from "./components/HeroSection.vue";
+import SimpleHero from "./components/SimpleHero.vue";
 import ProductSection from "./components/ProductSection.vue";
 import SecuritySection from "./components/SecuritySection.vue";
 import WorkflowSection from "./components/WorkflowSection.vue";
@@ -19,19 +19,28 @@ import ComplianceSection from "./components/ComplianceSection.vue";
 import CtaSection from "./components/CtaSection.vue";
 import { useCanvas } from "./composables/useCanvas";
 
-const { locale, t } = useI18n()
+const { locale, t } = useI18n();
 
 const navLinks = [
   { id: "product", labelKey: "nav_product" },
   { id: "security", labelKey: "nav_security" },
   { id: "workflow", labelKey: "nav_workflow" },
+  { id: "management", labelKey: "nav_management" },
   { id: "cta", labelKey: "nav_contact" },
 ];
 
-const scrollSections = ["product", "security", "workflow", "cta"];
+const scrollSections = ["product", "security", "workflow", "management", "cta"];
 
 const langTogglePulse = ref(false);
 const activeDot = ref(0);
+const mobileMenuOpen = ref(false);
+const showBackTop = ref(false);
+
+const setScrollLock = (locked) => {
+  const value = locked ? "hidden" : "";
+  document.documentElement.style.overflow = value;
+  document.body.style.overflow = value;
+};
 
 // Canvas hook
 const { canvasRef, setupCanvas, cleanup: cleanupCanvas } = useCanvas();
@@ -42,25 +51,27 @@ const langToggleStyle = computed(() => ({
 
 const animateLanguage = (lang) => {
   // 添加淡出效果
-  const i18nElements = document.querySelectorAll('[data-i18n], [data-i18n-html]');
-  i18nElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(4px)';
+  const i18nElements = document.querySelectorAll(
+    "[data-i18n], [data-i18n-html]"
+  );
+  i18nElements.forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(4px)";
   });
-  
+
   // 等待过渡完成后改变语言
   setTimeout(() => {
     locale.value = lang;
-    
+
     // 改变语言后，移除内联样式以触发过渡显示
     setTimeout(() => {
-      i18nElements.forEach(el => {
-        el.style.opacity = '';
-        el.style.transform = '';
+      i18nElements.forEach((el) => {
+        el.style.opacity = "";
+        el.style.transform = "";
       });
     }, 10);
   }, 140);
-  
+
   // 脉冲动画
   langTogglePulse.value = true;
   setTimeout(() => {
@@ -140,6 +151,7 @@ const updateDots = () => {
   }
 
   activeDot.value = active;
+  showBackTop.value = window.scrollY > 200;
 };
 
 const setupScrollDots = () => {
@@ -150,6 +162,22 @@ const setupScrollDots = () => {
 const scrollToSection = (id) => {
   const target = document.getElementById(id);
   if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  mobileMenuOpen.value = false; // 关闭移动菜单
+  setScrollLock(false);
+};
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value;
+  setScrollLock(mobileMenuOpen.value);
+};
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false;
+  setScrollLock(false);
 };
 
 watch(locale, (lang) => {
@@ -168,6 +196,7 @@ onBeforeUnmount(() => {
   cleanupCanvas();
   window.removeEventListener("scroll", updateDots);
   if (observer) observer.disconnect();
+  setScrollLock(false);
 });
 </script>
 
@@ -180,6 +209,17 @@ onBeforeUnmount(() => {
 
     <div class="page">
       <header class="nav">
+        <button
+          class="hamburger"
+          :class="{ active: mobileMenuOpen }"
+          @click="toggleMobileMenu"
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         <div class="logo">
           <div class="logo-mark"></div>
           <img
@@ -191,45 +231,61 @@ onBeforeUnmount(() => {
         <nav>
           <ul>
             <li v-for="link in navLinks" :key="link.id">
-              <a href="#" :data-i18n="link.labelKey">{{
-                t(link.labelKey)
-              }}</a>
+              <a
+                href="#"
+                @click.prevent="scrollToSection(link.id)"
+                :data-i18n="link.labelKey"
+                >{{ t(link.labelKey) }}</a
+              >
             </li>
           </ul>
         </nav>
         <div class="nav-actions">
-          <div
-            class="lang-toggle"
-            :class="{ pulse: langTogglePulse }"
-            :style="langToggleStyle"
+          <button
+            class="lang-icon-btn"
+            @click="animateLanguage(locale === 'zh' ? 'en' : 'zh')"
+            :aria-label="`Switch to ${locale === 'zh' ? 'English' : '简体中文'}`"
+            :title="`Switch to ${locale === 'zh' ? 'English' : '简体中文'}`"
           >
-            <button
-              class="lang-btn"
-              :class="{ active: locale === 'en' }"
-              @click="animateLanguage('en')"
-              data-lang="en"
-            >
-              EN
-            </button>
-            <button
-              class="lang-btn"
-              :class="{ active: locale === 'zh' }"
-              @click="animateLanguage('zh')"
-              data-lang="zh"
-            >
-              中文
-            </button>
-          </div>
-          <a class="btn ghost" href="#" data-i18n="nav_login">{{
-            t('nav_login')
-          }}</a>
-          <a class="btn" href="#" data-i18n="nav_signup">{{
-            t('nav_signup')
-          }}</a>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M3 12h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 3a15.3 15.3 0 0 1 4 9 15.3 15.3 0 0 1-4 9 15.3 15.3 0 0 1-4-9 15.3 15.3 0 0 1 4-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
         </div>
       </header>
 
-      <HeroSection />
+      <!-- 移动端侧边栏 -->
+      <div
+        class="mobile-overlay"
+        :class="{ active: mobileMenuOpen }"
+        @click="closeMobileMenu"
+      ></div>
+      <div class="mobile-sidebar" :class="{ open: mobileMenuOpen }">
+        <nav>
+          <ul>
+            <li v-for="link in navLinks" :key="link.id">
+              <a
+                href="#"
+                @click.prevent="scrollToSection(link.id)"
+                :data-i18n="link.labelKey"
+                >{{ t(link.labelKey) }}</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="mobile-sidebar-actions">
+          <a class="btn ghost" href="#" data-i18n="nav_login">{{
+            t("nav_login")
+          }}</a>
+          <a class="btn" href="#" data-i18n="nav_signup">{{
+            t("nav_signup")
+          }}</a>
+        </div>
+      </div>
+
+      <SimpleHero />
 
       <div class="scroll-indicator">
         <div
@@ -242,24 +298,31 @@ onBeforeUnmount(() => {
         ></div>
       </div>
 
+      <button
+        v-if="showBackTop"
+        class="back-to-top"
+        aria-label="Back to top"
+        @click="scrollToTop"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5l-7 7h4v7h6v-7h4z" />
+        </svg>
+      </button>
+
       <div class="glow-line"></div>
 
       <ProductSection />
 
       <SecuritySection />
 
-      <ManagementSection />
-
-      <ExpenseManagementSection />
-
       <WorkflowSection />
+
+      <ManagementSection />
 
       <CtaSection />
 
-      <ComplianceSection />
-
       <footer>
-        <div data-i18n="footer_text">{{ t('footer_text') }}</div>
+        <div data-i18n="footer_text">{{ t("footer_text") }}</div>
         <div
           style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center"
         >
@@ -267,24 +330,24 @@ onBeforeUnmount(() => {
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_status"
-            >{{ t('footer_status') }}</a
+            >{{ t("footer_status") }}</a
           >
           <a
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_docs"
-            >{{ t('footer_docs') }}</a
+            >{{ t("footer_docs") }}</a
           >
           <a
             href="#"
             style="color: var(--text-2); text-decoration: none"
             data-i18n="footer_careers"
-            >{{ t('footer_careers') }}</a
+            >{{ t("footer_careers") }}</a
           >
           <span
             style="color: var(--muted); font-size: 12px"
             data-i18n="footer_copyright"
-            >{{ t('footer_copyright') }}</span
+            >{{ t("footer_copyright") }}</span
           >
         </div>
       </footer>

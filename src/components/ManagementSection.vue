@@ -23,15 +23,10 @@ const scenarios = [
 <template>
   <section id="management" class="section">
     <div class="section-head">
-      <div>
-        <div class="pill" data-i18n="management_pill">
-          {{ t('management_pill') }}
-        </div>
-        <h2 data-i18n="management_heading">{{ t('management_heading') }}</h2>
-        <p class="lead" data-i18n="management_lead">
-          {{ t('management_lead') }}
-        </p>
-      </div>
+      <h2 data-i18n="management_heading">{{ t('management_heading') }}</h2>
+      <p class="lead" data-i18n="management_lead">
+        {{ t('management_lead') }}
+      </p>
     </div>
     <div class="grid">
       <div

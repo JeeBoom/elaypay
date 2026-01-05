@@ -14,15 +14,10 @@ const workflowCards = [
 <template>
   <section id="workflow" class="section">
     <div class="section-head">
-      <div>
-        <div class="pill" data-i18n="workflow_pill">
-          {{ t('workflow_pill') }}
-        </div>
-        <h2 data-i18n="workflow_heading">{{ t('workflow_heading') }}</h2>
-        <p class="lead" data-i18n="workflow_lead">
-          {{ t('workflow_lead') }}
-        </p>
-      </div>
+      <h2 data-i18n="workflow_heading">{{ t('workflow_heading') }}</h2>
+      <p class="lead" data-i18n="workflow_lead">
+        {{ t('workflow_lead') }}
+      </p>
     </div>
     <div class="grid">
       <div
