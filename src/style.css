@@ -1227,6 +1227,29 @@ footer {
 
   .hamburger {
     display: flex !important;
+    position: fixed;
+    top: 14px;
+    left: 16px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(12, 10, 24, 0.82);
+    border: 1px solid var(--stroke);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+    backdrop-filter: blur(12px);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  [data-theme="light"] .hamburger {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 24px rgba(16, 20, 40, 0.18);
   }
 
   header.nav nav {
@@ -1235,6 +1258,11 @@ footer {
 
   .nav-actions .btn {
     display: none !important;
+  }
+
+  .nav-actions {
+    margin-left: auto;
+    padding-right: 8px;
   }
 
   nav ul {
