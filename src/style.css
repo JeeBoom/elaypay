@@ -183,10 +183,6 @@ header.nav nav {
   margin-left: auto;
 }
 
-[data-theme="light"] header.nav {
-  /* 浅色模式无需特殊样式 */
-}
-
 .nav-actions {
   display: flex;
   align-items: center;
